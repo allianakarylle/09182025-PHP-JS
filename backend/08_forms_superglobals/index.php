@@ -1,10 +1,7 @@
 <?php
-
-if ($_SERVER["REQUEST_METHOD"] == $_POST) {
-    $name = filter_input(INPUT_POST, "name", FILTER_SANITIZE_SPECIAL_CHARS);
-}
+$contactsFile = "contacts.json";
+$contacts = file_exists($contactsFile) ? json_decode(file_get_contents($contactsFile), true) : [];
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,18 +11,22 @@ if ($_SERVER["REQUEST_METHOD"] == $_POST) {
     <title>Document</title>
 </head>
 <body>
-    <form action="" method="GET">
-        <label>Name:</label>
-        <input type="text" name="name" required>
+    <a href="create.php">Create new contact</a>
 
-        <label>Email:</label>
-        <input type="email" name="email" required>
+    <ul>
+        <?php foreach ($contacts as $contact): ?>
+            <li>
+                <img src="<?php echo $contact['image']; ?>" height="50">
+                <?php echo "{$contact['name']} - {$contact['email']} - {$contact['phone']}"; ?>
 
-        <label>Phone:</label>
-        <input type="type" name="phone" required>
+                <a href="delete.php?name=<?php echo $contact['name'] ?>">
+                    Delete
+                </a>
 
-        <button type="submit">Add Contact</button>
-    </form>
+
+            </li>
+            <?php endforeach; ?>
+    </ul>
 
 </body>
 </html>
